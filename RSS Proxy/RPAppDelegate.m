@@ -199,26 +199,36 @@
 - (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
     NSManagedObjectContext *context = [self managedObjectContext];
     
-    FeedItem* newFeedItem = [NSEntityDescription
-                     insertNewObjectForEntityForName:@"FeedItem"
-                     inManagedObjectContext:context];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"FeedItem" inManagedObjectContext:context];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title LIKE %@) AND (timestamp == %@)", item.title, item.date];
     
-    newFeedItem.title = item.title;
-    newFeedItem.desc = item.summary;
-    newFeedItem.timestamp = item.date;
-    newFeedItem.unread = @YES;
-    [current_feed addItemsObject:newFeedItem];
-    NSError *error;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setPredicate:predicate];
+    [request setEntity:entityDescription];
     
-    if (![context save:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-        if (error)
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        else
-            NSLog(@"item already stored: %@", newFeedItem.title);
+    NSArray *feedItems = [context executeFetchRequest:request error:nil];
+    if (feedItems.count == 0){
+        
+        FeedItem* newFeedItem = [NSEntityDescription
+                                 insertNewObjectForEntityForName:@"FeedItem"
+                                 inManagedObjectContext:context];
+        
+        newFeedItem.title = item.title;
+        newFeedItem.desc = item.summary;
+        newFeedItem.timestamp = item.date;
+        newFeedItem.unread = @YES;
+        
+        [current_feed addItemsObject:newFeedItem];
+        NSError *error;
+        
+        if (![context save:&error]) {
+            if (error)
+                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            else
+                NSLog(@"item already stored: %@", newFeedItem.title);
+        }
     }
-
 }
 
 @end
