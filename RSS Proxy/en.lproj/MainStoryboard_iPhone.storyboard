@@ -196,7 +196,7 @@
                             <outlet property="delegate" destination="u9T-5d-YUi" id="CdQ-Kv-glj"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Master" id="NDc-d9-K8R">
+                    <navigationItem key="navigationItem" title="Feeds" id="NDc-d9-K8R">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Dkc-nE-PVw">
                             <connections>
                                 <action selector="addNewFeed" destination="u9T-5d-YUi" id="223-JB-M9r"/>
