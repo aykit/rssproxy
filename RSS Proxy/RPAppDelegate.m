@@ -196,7 +196,25 @@
             feedParser.connectionType = ConnectionTypeSynchronously;
             [feedParser parse];
         }
+        [self updateApplicationBadge];
     });
+}
+
+- (void) updateApplicationBadge
+{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"FeedItem" inManagedObjectContext:context];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(unread == %@)", @YES];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setPredicate:predicate];
+    [request setEntity:entityDescription];
+    
+    NSArray *unreadFeedItems = [context executeFetchRequest:request error:nil];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = unreadFeedItems.count;
+    
 }
 
 - (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
