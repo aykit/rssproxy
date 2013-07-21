@@ -35,6 +35,9 @@
 		8DC43C09174AB57F00129991 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8DC943E0179BC95A00CE3D72 /* unread.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943DE179BC95A00CE3D72 /* unread.png */; };
 		8DC943E1179BC95A00CE3D72 /* unread@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943DF179BC95A00CE3D72 /* unread@2x.png */; };
+		8DC943E3179BCB2000CE3D72 /* feeds.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943E2179BCB2000CE3D72 /* feeds.png */; };
+		8DC943E5179BCC2500CE3D72 /* items.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943E4179BCC2500CE3D72 /* items.png */; };
+		8DC943E7179BCC2900CE3D72 /* items@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943E6179BCC2900CE3D72 /* items@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +85,9 @@
 		8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		8DC943DE179BC95A00CE3D72 /* unread.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unread.png; sourceTree = "<group>"; };
 		8DC943DF179BC95A00CE3D72 /* unread@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unread@2x.png"; sourceTree = "<group>"; };
+		8DC943E2179BCB2000CE3D72 /* feeds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feeds.png; sourceTree = "<group>"; };
+		8DC943E4179BCC2500CE3D72 /* items.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = items.png; sourceTree = "<group>"; };
+		8DC943E6179BCC2900CE3D72 /* items@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "items@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +157,9 @@
 		8DC43BB9174A221300129991 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8DC943E6179BCC2900CE3D72 /* items@2x.png */,
+				8DC943E4179BCC2500CE3D72 /* items.png */,
+				8DC943E2179BCB2000CE3D72 /* feeds.png */,
 				8DC943DE179BC95A00CE3D72 /* unread.png */,
 				8DC943DF179BC95A00CE3D72 /* unread@2x.png */,
 				8DC43BBA174A221300129991 /* RSS Proxy-Info.plist */,
@@ -257,6 +266,9 @@
 				8DC43BCF174A221300129991 /* MainStoryboard_iPad.storyboard in Resources */,
 				8DC943E0179BC95A00CE3D72 /* unread.png in Resources */,
 				8DC943E1179BC95A00CE3D72 /* unread@2x.png in Resources */,
+				8DC943E3179BCB2000CE3D72 /* feeds.png in Resources */,
+				8DC943E5179BCC2500CE3D72 /* items.png in Resources */,
+				8DC943E7179BCC2900CE3D72 /* items@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

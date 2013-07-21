@@ -8,7 +8,7 @@
         <scene sceneID="11">
             <objects>
                 <navigationController title="Items" id="3" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Items" id="S9r-FM-q5l"/>
+                    <tabBarItem key="tabBarItem" title="Items" image="items.png" id="S9r-FM-q5l"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -142,7 +142,7 @@
         <scene sceneID="at3-DX-rCc">
             <objects>
                 <navigationController title="Feeds" id="8ix-Se-GfQ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Feeds" id="bp6-Pb-yVK"/>
+                    <tabBarItem key="tabBarItem" title="Feeds" image="feeds.png" id="bp6-Pb-yVK"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="mzW-Y7-JtV">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -209,6 +209,10 @@
             <point key="canvasLocation" x="973" y="762"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="feeds.png" width="30" height="30"/>
+        <image name="items.png" width="60" height="60"/>
+    </resources>
     <classes>
         <class className="RPDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/RPDetailViewController.h"/>
