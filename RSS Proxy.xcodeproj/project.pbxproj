@@ -33,6 +33,8 @@
 		8DC43C05174AB55E00129991 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C02174AB54F00129991 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8DC43C06174AB55E00129991 /* MWFeedParser_Private.h in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BFC174AB53500129991 /* MWFeedParser_Private.h */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8DC43C09174AB57F00129991 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC943E0179BC95A00CE3D72 /* unread.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943DE179BC95A00CE3D72 /* unread.png */; };
+		8DC943E1179BC95A00CE3D72 /* unread@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC943DF179BC95A00CE3D72 /* unread@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +80,8 @@
 		8DC43C02174AB54F00129991 /* NSString+XMLEntities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+XMLEntities.m"; sourceTree = "<group>"; };
 		8DC43C07174AB57B00129991 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		8DC943DE179BC95A00CE3D72 /* unread.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unread.png; sourceTree = "<group>"; };
+		8DC943DF179BC95A00CE3D72 /* unread@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unread@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,8 @@
 		8DC43BB9174A221300129991 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8DC943DE179BC95A00CE3D72 /* unread.png */,
+				8DC943DF179BC95A00CE3D72 /* unread@2x.png */,
 				8DC43BBA174A221300129991 /* RSS Proxy-Info.plist */,
 				8DC43BBB174A221300129991 /* InfoPlist.strings */,
 				8DC43BBE174A221300129991 /* main.m */,
@@ -249,6 +255,8 @@
 				8DC43BC9174A221300129991 /* Default-568h@2x.png in Resources */,
 				8DC43BCC174A221300129991 /* MainStoryboard_iPhone.storyboard in Resources */,
 				8DC43BCF174A221300129991 /* MainStoryboard_iPad.storyboard in Resources */,
+				8DC943E0179BC95A00CE3D72 /* unread.png in Resources */,
+				8DC943E1179BC95A00CE3D72 /* unread@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +417,7 @@
 				8DC43BDD174A221300129991 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

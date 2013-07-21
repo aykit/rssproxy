@@ -215,7 +215,7 @@
 
     UIImageView *imgNewView = (UIImageView *)[cell viewWithTag:100];
     
-    CGRect rect = imgNewView.frame;
+ /*   CGRect rect = imgNewView.frame;
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -223,8 +223,8 @@
     CGContextFillRect(context, rect);
     
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    imgNewView.image = feedItem.unread?image:nil;
+    UIGraphicsEndImageContext();*/
+    imgNewView.image = feedItem.unread?[UIImage imageNamed:@"unread"]:nil;
 }
 
 @end
