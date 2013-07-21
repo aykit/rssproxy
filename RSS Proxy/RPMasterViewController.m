@@ -7,8 +7,8 @@
 //
 
 #import "RPMasterViewController.h"
-
 #import "RPDetailViewController.h"
+#import "RPAppDelegate.h"
 
 @interface RPMasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -36,6 +36,20 @@
  //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
  //   self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (RPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]
+                                        init];
+    [refreshControl addTarget:self action:@selector(updateFeeds) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+}
+
+- (void)updateFeeds
+{
+    RPAppDelegate* appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate updateFeeds];
+    
+    [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil
+               afterDelay:1];
 }
 
 - (void)didReceiveMemoryWarning
