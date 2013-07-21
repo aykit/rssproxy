@@ -43,7 +43,8 @@
         self.detailTitleLabel.text = self.detailItem.title;
         self.detailDateLabel.text = [dateFormatter stringFromDate: self.detailItem.timestamp];
       //  self.detailDescriptionLabel.text = [self.detailItem.desc stringByConvertingHTMLToPlainText];
-        [self.detailDescriptionWebView loadHTMLString:[NSString stringWithFormat:@"<style>* {margin: 0; padding: 0; border: 0; font-family: \"Helvetica\"}</style>%@",self.detailItem.desc] baseURL:nil];
+        UIFont* systemFont = [UIFont systemFontOfSize:17];
+        [self.detailDescriptionWebView loadHTMLString:[NSString stringWithFormat:@"<style>* {margin: 0; padding: 0; border: 0; font-family: \"%@\"}</style>%@", systemFont.familyName, self.detailItem.desc] baseURL:nil];
     }
 }
 
