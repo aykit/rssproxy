@@ -174,26 +174,29 @@
 }
 
 - (void) updateFeeds {
-    NSManagedObjectContext *moc = [self managedObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"Feed" inManagedObjectContext:moc];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    NSError *error;
-    NSArray *feeds = [moc executeFetchRequest:request error:&error];
-    
-    MWFeedParser* feedParser;
-    
-    for (Feed* feed in feeds) {
-        current_feed = feed;
-        NSURL *feedURL = [NSURL URLWithString:feed.link];
-        feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
-        feedParser.delegate = self;
-        feedParser.feedParseType = ParseTypeFull;
-        feedParser.connectionType = ConnectionTypeSynchronously;
-        [feedParser parse];
-    }
+    dispatch_async(dispatch_get_global_queue(0, 0),
+    ^ {
+        NSManagedObjectContext *moc = [self managedObjectContext];
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"Feed" inManagedObjectContext:moc];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        NSError *error;
+        NSArray *feeds = [moc executeFetchRequest:request error:&error];
+        
+        MWFeedParser* feedParser;
+        
+        for (Feed* feed in feeds) {
+            current_feed = feed;
+            NSURL *feedURL = [NSURL URLWithString:feed.link];
+            feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+            feedParser.delegate = self;
+            feedParser.feedParseType = ParseTypeFull;
+            feedParser.connectionType = ConnectionTypeSynchronously;
+            [feedParser parse];
+        }
+    });
 }
 
 - (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
