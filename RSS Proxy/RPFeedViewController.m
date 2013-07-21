@@ -6,17 +6,20 @@
 //  Copyright (c) 2013 aykit. All rights reserved.
 //
 
-#import "RPMasterViewController.h"
+#import "RPFeedViewController.h"
+#import "RPAppDelegate.h"
+#import "Feed.h"
+#import "MWFeedInfo.h"
 
-#import "RPDetailViewController.h"
 
-@interface RPMasterViewController ()
+@interface RPFeedViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
-@implementation RPMasterViewController
+@implementation RPFeedViewController
 
 @synthesize managedObjectContext;
+@synthesize fetchedResultsController = _fetchedResultsController;
 
 - (void)awakeFromNib
 {
@@ -31,17 +34,74 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-//
- //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
- //   self.navigationItem.rightBarButtonItem = addButton;
-    self.detailViewController = (RPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction) addNewFeed {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add Feed URL"
+                                                    message:nil
+                                                   delegate:self
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Done", nil];
+    
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField *textField = [alert textFieldAtIndex:0];
+    textField.keyboardType = UIKeyboardTypeURL;
+    
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alert clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 0) {
+        UITextField *textField = [alert textFieldAtIndex:0];
+        
+        NSString* feedString = textField.text;
+        if(feedString == nil) {
+            return;
+        } else {
+            NSURL *feedURL = [NSURL URLWithString:feedString];
+            MWFeedParser* feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+            feedParser.feedParseType = ParseTypeInfoOnly;
+            feedParser.delegate = self;
+            feedParser.connectionType = ConnectionTypeAsynchronously;
+            [feedParser parse];
+        }
+    }
+}
+
+- (void) feedParser:(MWFeedParser *)parser didFailWithError:(NSError *)error {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error parsing your Feed"
+                                                    message:[error localizedDescription]
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"OK", nil];
+    
+    alert.alertViewStyle = UIAlertViewStyleDefault;
+    
+    [alert show];
+}
+
+- (void)feedParser:(MWFeedParser *)parser didParseFeedInfo:(MWFeedInfo *)info {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    Feed* newFeed = [NSEntityDescription
+                     insertNewObjectForEntityForName:@"Feed"
+                     inManagedObjectContext:context];
+    
+    newFeed.link = [parser.url absoluteString];
+    newFeed.title = info.title;
+    
+    NSError *error;
+    [context save:&error];
+    
+    RPAppDelegate *appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate updateFeeds];
 }
 
 #pragma mark - Table View
@@ -72,36 +132,25 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // ReturnNO if you do not want the specified item to be editable.
-    return NO;
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+        [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
+        
+        NSError *error = nil;
+        [context save:&error];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // The table view should not be re-orderable.
     return NO;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        FeedItem *feedItem = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        feedItem.unread = NO;
-        [[self managedObjectContext] save:nil];
-        
-        self.detailViewController.detailItem = feedItem;
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        FeedItem *feedItem = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        feedItem.unread = NO;
-        [[self managedObjectContext] save:nil];
-        [[segue destinationViewController] setDetailItem:feedItem];
-    }
 }
 
 #pragma mark - Fetched results controller
@@ -114,14 +163,14 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"FeedItem" inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Feed" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
@@ -134,14 +183,14 @@
     
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
-	     // Replace this implementation with code to handle the error appropriately.
-	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
 	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 	    abort();
 	}
     
     return _fetchedResultsController;
-}    
+}
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
@@ -194,13 +243,13 @@
 }
 
 /*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
+ // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
  
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    [self.tableView reloadData];
-}
+ {
+ // In the simplest, most efficient, case, reload the table view.
+ [self.tableView reloadData];
+ }
  */
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -209,22 +258,9 @@
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     
-    FeedItem *feedItem = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    ((UILabel *)[cell viewWithTag:101]).text = feedItem.title;
-    ((UILabel *)[cell viewWithTag:102]).text = [dateFormatter stringFromDate:feedItem.timestamp];
-
-    UIImageView *imgNewView = (UIImageView *)[cell viewWithTag:100];
-    
-    CGRect rect = imgNewView.frame;
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [[UIColor blueColor] CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    imgNewView.image = feedItem.unread?image:nil;
+    Feed *feed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    ((UILabel *)[cell viewWithTag:101]).text = feed.title;
+    ((UILabel *)[cell viewWithTag:102]).text = feed.link;
 }
 
 @end

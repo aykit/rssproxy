@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MWFeedParser.h"
+#import "Feed.h"
 
-@interface RPAppDelegate : UIResponder <UIApplicationDelegate>
+@interface RPAppDelegate : UIResponder <UIApplicationDelegate, MWFeedParserDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
@@ -16,7 +18,11 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (strong, nonatomic) Feed *current_feed;
+
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (void)updateFeeds;
+
 
 @end

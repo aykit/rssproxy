@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FeedItem.h"
 
 @interface RPDetailViewController : UIViewController <UISplitViewControllerDelegate>
 
-@property (strong, nonatomic) id detailItem;
+@property (strong, nonatomic) FeedItem* detailItem;
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (weak, nonatomic) IBOutlet UILabel *detailTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *detailDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @end

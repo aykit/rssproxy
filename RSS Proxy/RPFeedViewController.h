@@ -1,5 +1,5 @@
 //
-//  RPMasterViewController.h
+//  RPFeedViewController.h
 //  RSS Proxy
 //
 //  Created by Markus Klepp on 5/20/13.
@@ -8,16 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class RPDetailViewController;
-
 #import <CoreData/CoreData.h>
-#import "FeedItem.h"
+#import "MWFeedParser.h"
 
-@interface RPMasterViewController : UITableViewController <NSFetchedResultsControllerDelegate>
-
-@property (strong, nonatomic) RPDetailViewController *detailViewController;
+@interface RPFeedViewController : UITableViewController <NSFetchedResultsControllerDelegate, MWFeedParserDelegate>
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+- (IBAction) addNewFeed;
 
 @end

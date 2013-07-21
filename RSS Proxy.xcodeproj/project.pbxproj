@@ -22,6 +22,17 @@
 		8DC43BD2174A221300129991 /* RSS_Proxy.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BD0174A221300129991 /* RSS_Proxy.xcdatamodeld */; };
 		8DC43BD5174A221300129991 /* RPMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BD4174A221300129991 /* RPMasterViewController.m */; };
 		8DC43BD8174A221300129991 /* RPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BD7174A221300129991 /* RPDetailViewController.m */; };
+		8DC43BE0174A485A00129991 /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BDF174A485A00129991 /* FeedItem.m */; };
+		8DC43BE3174A485B00129991 /* Feed.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BE2174A485B00129991 /* Feed.m */; };
+		8DC43BEC174AAB3500129991 /* RPFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BEB174AAB3500129991 /* RPFeedViewController.m */; };
+		8DC43BF9174AB3AD00129991 /* MWFeedInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BF4174AB29300129991 /* MWFeedInfo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43BFA174AB3AD00129991 /* MWFeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BF6174AB29300129991 /* MWFeedItem.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43BFB174AB3AD00129991 /* MWFeedParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BF2174AB1E100129991 /* MWFeedParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43C03174AB55E00129991 /* NSDate+InternetDateTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BFE174AB54F00129991 /* NSDate+InternetDateTime.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43C04174AB55E00129991 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C00174AB54F00129991 /* NSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43C05174AB55E00129991 /* NSString+XMLEntities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C02174AB54F00129991 /* NSString+XMLEntities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43C06174AB55E00129991 /* MWFeedParser_Private.h in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43BFC174AB53500129991 /* MWFeedParser_Private.h */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8DC43C09174AB57F00129991 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +57,27 @@
 		8DC43BD4174A221300129991 /* RPMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPMasterViewController.m; sourceTree = "<group>"; };
 		8DC43BD6174A221300129991 /* RPDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPDetailViewController.h; sourceTree = "<group>"; };
 		8DC43BD7174A221300129991 /* RPDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPDetailViewController.m; sourceTree = "<group>"; };
+		8DC43BDE174A485A00129991 /* FeedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedItem.h; path = Models/FeedItem.h; sourceTree = "<group>"; };
+		8DC43BDF174A485A00129991 /* FeedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedItem.m; path = Models/FeedItem.m; sourceTree = "<group>"; };
+		8DC43BE1174A485B00129991 /* Feed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Feed.h; path = Models/Feed.h; sourceTree = "<group>"; };
+		8DC43BE2174A485B00129991 /* Feed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Feed.m; path = Models/Feed.m; sourceTree = "<group>"; };
+		8DC43BEA174AAB3500129991 /* RPFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPFeedViewController.h; sourceTree = "<group>"; };
+		8DC43BEB174AAB3500129991 /* RPFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPFeedViewController.m; sourceTree = "<group>"; };
+		8DC43BF1174AB1E100129991 /* MWFeedParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWFeedParser.h; sourceTree = "<group>"; };
+		8DC43BF2174AB1E100129991 /* MWFeedParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWFeedParser.m; sourceTree = "<group>"; };
+		8DC43BF3174AB29300129991 /* MWFeedInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWFeedInfo.h; sourceTree = "<group>"; };
+		8DC43BF4174AB29300129991 /* MWFeedInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWFeedInfo.m; sourceTree = "<group>"; };
+		8DC43BF5174AB29300129991 /* MWFeedItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWFeedItem.h; sourceTree = "<group>"; };
+		8DC43BF6174AB29300129991 /* MWFeedItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MWFeedItem.m; sourceTree = "<group>"; };
+		8DC43BFC174AB53500129991 /* MWFeedParser_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MWFeedParser_Private.h; sourceTree = "<group>"; };
+		8DC43BFD174AB54F00129991 /* NSDate+InternetDateTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+InternetDateTime.h"; sourceTree = "<group>"; };
+		8DC43BFE174AB54F00129991 /* NSDate+InternetDateTime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+InternetDateTime.m"; sourceTree = "<group>"; };
+		8DC43BFF174AB54F00129991 /* NSString+HTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		8DC43C00174AB54F00129991 /* NSString+HTML.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		8DC43C01174AB54F00129991 /* NSString+XMLEntities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+XMLEntities.h"; sourceTree = "<group>"; };
+		8DC43C02174AB54F00129991 /* NSString+XMLEntities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+XMLEntities.m"; sourceTree = "<group>"; };
+		8DC43C07174AB57B00129991 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,10 +126,14 @@
 		8DC43BB8174A221300129991 /* RSS Proxy */ = {
 			isa = PBXGroup;
 			children = (
+				8DC43BEE174AB1B900129991 /* MWFeed */,
+				8DC43BED174AB1AB00129991 /* Models */,
 				8DC43BC1174A221300129991 /* RPAppDelegate.h */,
 				8DC43BC2174A221300129991 /* RPAppDelegate.m */,
 				8DC43BCA174A221300129991 /* MainStoryboard_iPhone.storyboard */,
 				8DC43BCD174A221300129991 /* MainStoryboard_iPad.storyboard */,
+				8DC43BEA174AAB3500129991 /* RPFeedViewController.h */,
+				8DC43BEB174AAB3500129991 /* RPFeedViewController.m */,
 				8DC43BD3174A221300129991 /* RPMasterViewController.h */,
 				8DC43BD4174A221300129991 /* RPMasterViewController.m */,
 				8DC43BD6174A221300129991 /* RPDetailViewController.h */,
@@ -120,6 +156,39 @@
 				8DC43BC8174A221300129991 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8DC43BED174AB1AB00129991 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8DC43BE1174A485B00129991 /* Feed.h */,
+				8DC43BE2174A485B00129991 /* Feed.m */,
+				8DC43BDE174A485A00129991 /* FeedItem.h */,
+				8DC43BDF174A485A00129991 /* FeedItem.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		8DC43BEE174AB1B900129991 /* MWFeed */ = {
+			isa = PBXGroup;
+			children = (
+				8DC43C07174AB57B00129991 /* GTMNSString+HTML.h */,
+				8DC43C08174AB57B00129991 /* GTMNSString+HTML.m */,
+				8DC43BFD174AB54F00129991 /* NSDate+InternetDateTime.h */,
+				8DC43BFE174AB54F00129991 /* NSDate+InternetDateTime.m */,
+				8DC43BFF174AB54F00129991 /* NSString+HTML.h */,
+				8DC43C00174AB54F00129991 /* NSString+HTML.m */,
+				8DC43C01174AB54F00129991 /* NSString+XMLEntities.h */,
+				8DC43C02174AB54F00129991 /* NSString+XMLEntities.m */,
+				8DC43BFC174AB53500129991 /* MWFeedParser_Private.h */,
+				8DC43BF3174AB29300129991 /* MWFeedInfo.h */,
+				8DC43BF4174AB29300129991 /* MWFeedInfo.m */,
+				8DC43BF5174AB29300129991 /* MWFeedItem.h */,
+				8DC43BF6174AB29300129991 /* MWFeedItem.m */,
+				8DC43BF1174AB1E100129991 /* MWFeedParser.h */,
+				8DC43BF2174AB1E100129991 /* MWFeedParser.m */,
+			);
+			name = MWFeed;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,11 +259,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DC43C09174AB57F00129991 /* GTMNSString+HTML.m in Sources */,
+				8DC43C03174AB55E00129991 /* NSDate+InternetDateTime.m in Sources */,
+				8DC43C04174AB55E00129991 /* NSString+HTML.m in Sources */,
+				8DC43C05174AB55E00129991 /* NSString+XMLEntities.m in Sources */,
+				8DC43C06174AB55E00129991 /* MWFeedParser_Private.h in Sources */,
+				8DC43BF9174AB3AD00129991 /* MWFeedInfo.m in Sources */,
+				8DC43BFA174AB3AD00129991 /* MWFeedItem.m in Sources */,
+				8DC43BFB174AB3AD00129991 /* MWFeedParser.m in Sources */,
 				8DC43BBF174A221300129991 /* main.m in Sources */,
 				8DC43BC3174A221300129991 /* RPAppDelegate.m in Sources */,
 				8DC43BD2174A221300129991 /* RSS_Proxy.xcdatamodeld in Sources */,
 				8DC43BD5174A221300129991 /* RPMasterViewController.m in Sources */,
 				8DC43BD8174A221300129991 /* RPDetailViewController.m in Sources */,
+				8DC43BE0174A485A00129991 /* FeedItem.m in Sources */,
+				8DC43BE3174A485B00129991 /* Feed.m in Sources */,
+				8DC43BEC174AAB3500129991 /* RPFeedViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +372,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSS Proxy/RSS Proxy-Prefix.pch";
 				INFOPLIST_FILE = "RSS Proxy/RSS Proxy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -303,6 +384,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSS Proxy/RSS Proxy-Prefix.pch";
 				INFOPLIST_FILE = "RSS Proxy/RSS Proxy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

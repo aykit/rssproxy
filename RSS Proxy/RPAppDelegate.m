@@ -9,28 +9,43 @@
 #import "RPAppDelegate.h"
 
 #import "RPMasterViewController.h"
+#import "RPFeedViewController.h"
+
+#import "MWFeedParser.h"
+#import "Feed.h"
+#import "FeedItem.h"
 
 @implementation RPAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize current_feed;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-        UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-        splitViewController.delegate = (id)navigationController.topViewController;
-        
-        UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
-        RPMasterViewController *controller = (RPMasterViewController *)masterNavigationController.topViewController;
-        controller.managedObjectContext = self.managedObjectContext;
+//        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+//        UITabBarController *tabBarController = [splitViewController.viewControllers lastObject];
+//        UINavigationController * navigationController = [tabBarController.viewControllers objectAtIndex:0];
+//        splitViewController.delegate = (id)navigationController.topViewController;
+//        
+//        UITabBarController *masterTabbarController = splitViewController.viewControllers[0];
+//        UINavigationController * masterNavigationController = [tabBarController.viewControllers objectAtIndex:0];
+//        RPMasterViewController *controller = (RPMasterViewController *)masterNavigationController.topViewController;
+//        controller.managedObjectContext = self.managedObjectContext;
     } else {
-        UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+        UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+        UINavigationController * navigationController = [tabBarController.viewControllers objectAtIndex:0];
         RPMasterViewController *controller = (RPMasterViewController *)navigationController.topViewController;
         controller.managedObjectContext = self.managedObjectContext;
+        
+        UINavigationController * feedNavigationController = [tabBarController.viewControllers objectAtIndex:1];
+        RPFeedViewController *feedController = (RPFeedViewController *)feedNavigationController.topViewController;
+        feedController.managedObjectContext = self.managedObjectContext;
+        
+        [self updateFeeds];
     }
     return YES;
 }
@@ -156,6 +171,46 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+- (void) updateFeeds {
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"Feed" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSError *error;
+    NSArray *feeds = [moc executeFetchRequest:request error:&error];
+    
+    MWFeedParser* feedParser;
+    
+    for (Feed* feed in feeds) {
+        current_feed = feed;
+        NSURL *feedURL = [NSURL URLWithString:feed.link];
+        feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+        feedParser.delegate = self;
+        feedParser.feedParseType = ParseTypeFull;
+        feedParser.connectionType = ConnectionTypeSynchronously;
+        [feedParser parse];
+    }
+}
+
+- (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    FeedItem* newFeedItem = [NSEntityDescription
+                     insertNewObjectForEntityForName:@"FeedItem"
+                     inManagedObjectContext:context];
+    
+    newFeedItem.title = item.title;
+    newFeedItem.desc = item.summary;
+    newFeedItem.timestamp = item.date;
+    newFeedItem.unread = @YES;
+    [current_feed addItemsObject:newFeedItem];
+    NSError *error;
+    [context save:&error];
+
 }
 
 @end
