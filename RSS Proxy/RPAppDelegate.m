@@ -107,6 +107,12 @@
         _managedObjectContext = [[NSManagedObjectContext alloc] init];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contextDidSave)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:_managedObjectContext];
+    
     return _managedObjectContext;
 }
 
@@ -173,6 +179,11 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+-(void) contextDidSave
+{
+    [self updateApplicationBadge];
+}
+
 - (void) updateFeeds {
     dispatch_async(dispatch_get_global_queue(0, 0),
     ^ {
@@ -196,7 +207,6 @@
             feedParser.connectionType = ConnectionTypeSynchronously;
             [feedParser parse];
         }
-        [self updateApplicationBadge];
     });
 }
 
