@@ -24,7 +24,7 @@
         NSManagedObjectContext *moc = [self managedObjectContext];
         NSEntityDescription *entityDescription = [NSEntityDescription
                                                   entityForName:@"FeedItem" inManagedObjectContext:moc];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title LIKE %@) AND (timestamp == %@)", self.title, self.timestamp];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(title LIKE %@) AND (timestamp == %@) AND (unread == 0)", self.title, self.timestamp];
         
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setPredicate:predicate];
