@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FeedItem.h"
 
-@interface RPDetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface RPDetailViewController : UIViewController <UISplitViewControllerDelegate, UIWebViewDelegate>
 
 @property (strong, nonatomic) FeedItem* detailItem;
 
@@ -17,5 +17,5 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *detailTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UIWebView *detailDescriptionWebView;
 @end

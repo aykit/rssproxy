@@ -42,32 +42,28 @@
     if (self.detailItem) {
         self.detailTitleLabel.text = self.detailItem.title;
         self.detailDateLabel.text = [dateFormatter stringFromDate: self.detailItem.timestamp];
-        self.detailDescriptionLabel.text = self.detailItem.desc;
-        
-        CGSize titleSize = [self.detailItem.title sizeWithFont: self.detailTitleLabel.font
-                                                  constrainedToSize:CGSizeMake(self.detailTitleLabel.frame.size.width, CGFLOAT_MAX)
-                                                      lineBreakMode:UILineBreakModeWordWrap];
-        
-        CGRect newTitleFrame = CGRectMake(self.detailTitleLabel.frame.origin.x, self.detailTitleLabel.frame.origin.y, titleSize.width, titleSize.height);
-        
-        CGFloat heightDiff = newTitleFrame.size.height - self.detailTitleLabel.frame.size.height;
-        
-        self.detailDateLabel.frame = CGRectMake(self.detailDateLabel.frame.origin.x, self.detailDateLabel.frame.origin.y + heightDiff, self.detailDateLabel.frame.size.width, self.detailDateLabel.frame.size.height);
-        
-        [self.detailTitleLabel setFrame:newTitleFrame];
-        
-        CGSize descriptionSize = [self.detailItem.desc sizeWithFont: self.detailDescriptionLabel.font
-           constrainedToSize:CGSizeMake(self.detailDescriptionLabel.frame.size.width, CGFLOAT_MAX)
-               lineBreakMode:UILineBreakModeWordWrap];
-        
-        CGRect newDescriptionFrame = CGRectMake(self.detailDescriptionLabel.frame.origin.x, self.detailDescriptionLabel.frame.origin.y + heightDiff, descriptionSize.width, descriptionSize.height);
-        
-        [self.detailDescriptionLabel setFrame:newDescriptionFrame];
-        
-        float scrollViewContentHeight = newDescriptionFrame.origin.y + newDescriptionFrame.size.height + self.detailTitleLabel.frame.origin.y;
-        
-        self.scrollView.contentSize = CGSizeMake(self.detailDescriptionLabel.frame.size.width, scrollViewContentHeight);
+      //  self.detailDescriptionLabel.text = [self.detailItem.desc stringByConvertingHTMLToPlainText];
+        [self.detailDescriptionWebView loadHTMLString:[NSString stringWithFormat:@"<style>* {margin: 0; padding: 0; border: 0; font-family: \"Helvetica\"}</style>%@",self.detailItem.desc] baseURL:nil];
     }
+}
+
+- (void) webViewDidFinishLoad:(UIWebView *)webView{
+    CGSize titleSize = [self.detailItem.title sizeWithFont: self.detailTitleLabel.font
+                                         constrainedToSize:CGSizeMake(self.detailTitleLabel.frame.size.width, CGFLOAT_MAX)
+                                             lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGRect newTitleFrame = CGRectMake(self.detailTitleLabel.frame.origin.x, self.detailTitleLabel.frame.origin.y, titleSize.width, titleSize.height);
+    
+    CGFloat heightDiff = newTitleFrame.size.height - self.detailTitleLabel.frame.size.height;
+    
+    self.detailDateLabel.frame = CGRectMake(self.detailDateLabel.frame.origin.x, self.detailDateLabel.frame.origin.y + heightDiff, self.detailDateLabel.frame.size.width, self.detailDateLabel.frame.size.height);
+    
+    [self.detailTitleLabel setFrame:newTitleFrame];
+    
+    CGSize descriptionWebViewContentSize = self.detailDescriptionWebView.scrollView.contentSize;
+    
+    self.detailDescriptionWebView.frame = CGRectMake(self.detailDescriptionWebView.frame.origin.x, self.detailDescriptionWebView.frame.origin.y + heightDiff, descriptionWebViewContentSize.width, descriptionWebViewContentSize.height);
+    self.scrollView.contentSize = CGSizeMake(descriptionWebViewContentSize.width, descriptionWebViewContentSize.height + self.detailDescriptionWebView.frame.origin.y);
 }
 
 - (void)viewDidLoad
