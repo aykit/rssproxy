@@ -99,8 +99,11 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         FeedItem *feedItem = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         feedItem.unread = NO;
-        [[self managedObjectContext] save:nil];
+        if (![[self managedObjectContext] save:nil]){
+            feedItem.unread = @YES;
+        }
         [[segue destinationViewController] setDetailItem:feedItem];
+        
     }
 }
 
