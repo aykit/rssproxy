@@ -69,7 +69,7 @@
                             <outlet property="delegate" destination="12" id="15"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Master" id="36"/>
+                    <navigationItem key="navigationItem" title="Items" id="36"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17" sceneMemberID="firstResponder"/>
             </objects>
@@ -107,7 +107,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </scrollView>
-                    <navigationItem key="navigationItem" title="Detail" id="26"/>
+                    <navigationItem key="navigationItem" id="26"/>
                     <connections>
                         <outlet property="detailDateLabel" destination="R4r-fX-JOq" id="g5o-dr-Fex"/>
                         <outlet property="detailDescriptionLabel" destination="Rn5-Ye-YQ8" id="kIP-96-CUE"/>
@@ -211,7 +211,7 @@
     </scenes>
     <resources>
         <image name="feeds.png" width="30" height="30"/>
-        <image name="items.png" width="60" height="60"/>
+        <image name="items.png" width="30" height="30"/>
     </resources>
     <classes>
         <class className="RPDetailViewController" superclassName="UIViewController">
