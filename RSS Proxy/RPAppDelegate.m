@@ -251,14 +251,18 @@
         newFeedItem.unread = @YES;
         
         [current_feed addItemsObject:newFeedItem];
-        NSError *error;
         
-        if (![context save:&error]) {
-            if (error)
-                NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            else
-                NSLog(@"item already stored: %@", newFeedItem.title);
-        }
+    }
+}
+
+- (void) feedParserDidFinish:(MWFeedParser *)parser {
+    NSError *error;
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    if (![context save:&error]) {
+        if (error)
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        
     }
 }
 

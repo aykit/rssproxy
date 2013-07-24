@@ -30,6 +30,7 @@
 #import <Foundation/Foundation.h>
 #import "MWFeedInfo.h"
 #import "MWFeedItem.h"
+#import "ASIHTTPRequestDelegate.h"
 
 // Debug Logging
 #if 0 // Set to 1 to enable debug logging
@@ -65,7 +66,7 @@ typedef enum { FeedTypeUnknown, FeedTypeRSS, FeedTypeRSS1, FeedTypeAtom } FeedTy
 @end
 
 // MWFeedParser
-@interface MWFeedParser : NSObject <NSXMLParserDelegate> {
+@interface MWFeedParser : NSObject <NSXMLParserDelegate, ASIHTTPRequestDelegate> {
 
 @private
 	
@@ -75,7 +76,7 @@ typedef enum { FeedTypeUnknown, FeedTypeRSS, FeedTypeRSS1, FeedTypeAtom } FeedTy
 	// Connection
 	NSURLConnection *urlConnection;
 	NSMutableData *asyncData;
-	NSString *asyncTextEncodingName;
+	NSStringEncoding asyncTextEncodingName;
 	ConnectionType connectionType;
 	
 	// Parsing

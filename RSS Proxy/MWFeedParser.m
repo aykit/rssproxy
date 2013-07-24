@@ -31,6 +31,7 @@
 #import "MWFeedParser_Private.h"
 #import "NSString+HTML.h"
 #import "NSDate+InternetDateTime.h"
+#import "ASIHTTPRequest.h"
 
 // NSXMLParser Logging
 #if 0 // Set to 1 to enable XML parsing logs
@@ -119,7 +120,7 @@
 // Exclude parse state variables as they are needed after parse
 - (void)reset {
 	self.asyncData = nil;
-	self.asyncTextEncodingName = nil;
+	self.asyncTextEncodingName = NSUTF8StringEncoding;
 	self.urlConnection = nil;
 	feedType = FeedTypeUnknown;
 	self.currentPath = @"/";
@@ -155,10 +156,16 @@
 	BOOL success = YES;
 	
 	// Request
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
-												  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
-											  timeoutInterval:60];
-	[request setValue:@"MWFeedParser" forHTTPHeaderField:@"User-Agent"];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSString* proxyHost = [prefs stringForKey:@"proxy_host"];
+    NSString* proxyPort = [prefs stringForKey:@"proxy_port"];
+    if (proxyHost && proxyPort) {
+        [request setProxyHost:proxyHost];
+        [request setProxyPort:[proxyPort intValue]];
+        [request setProxyType:(NSString *)kCFProxyTypeSOCKS];
+    }
 	
 	// Debug Log
 	MWLog(@"MWFeedParser: Connecting & downloading feed data");
@@ -167,23 +174,19 @@
 	if (connectionType == ConnectionTypeAsynchronously) {
 		
 		// Async
-		urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-		if (urlConnection) {
-			asyncData = [[NSMutableData alloc] init];// Create data
-		} else {
-			[self parsingFailedWithErrorCode:MWErrorCodeConnectionFailed 
-							  andDescription:[NSString stringWithFormat:@"Asynchronous connection failed to URL: %@", url]];
-			success = NO;
-		}
+        [request setDelegate:self];
+        [request startAsynchronous];
+        asyncData = [[NSMutableData alloc] init];// Create data
+		
 		
 	} else {
 	
+        [request startSynchronous];
 		// Sync
-		NSURLResponse *response = nil;
-		NSError *error = nil;
-		NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+		NSError *error = [request error];
+		NSData *data = [request responseData];
 		if (data && !error) {
-			[self startParsingData:data textEncodingName:[response textEncodingName]]; // Process
+			[self startParsingData:data textEncodingName:[request responseEncoding]]; // Process
 		} else {
 			[self parsingFailedWithErrorCode:MWErrorCodeConnectionFailed 
 							  andDescription:[NSString stringWithFormat:@"Synchronous connection failed to URL: %@", url]];
@@ -193,13 +196,12 @@
 	}
 	
 	// Cleanup & return
-	[request release];
 	return success;
 	
 }
 
 // Begin XML parsing
-- (void)startParsingData:(NSData *)data textEncodingName:(NSString *)textEncodingName {
+- (void)startParsingData:(NSData *)data textEncodingName:(NSStringEncoding)textEncodingName {
 	if (data && !feedParser) {
 		
 		// Create feed info
@@ -208,19 +210,16 @@
 		[i release];
 		
 		// Check whether it's UTF-8
-		if (![[textEncodingName lowercaseString] isEqualToString:@"utf-8"]) {
+		if (textEncodingName != NSUTF8StringEncoding) {
 			
 			// Not UTF-8 so convert
 			MWLog(@"MWFeedParser: XML document was not UTF-8 so we're converting it");
 			NSString *string = nil;
 			
 			// Attempt to detect encoding from response header
-			NSStringEncoding nsEncoding = 0;
-			if (textEncodingName) {
-				CFStringEncoding cfEncoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)textEncodingName);
-				if (cfEncoding != kCFStringEncodingInvalidId) {
-					nsEncoding = CFStringConvertEncodingToNSStringEncoding(cfEncoding);
-					if (nsEncoding != 0) string = [[NSString alloc] initWithData:data encoding:nsEncoding];
+			if (textEncodingName != 0) {
+				if (textEncodingName != kCFStringEncodingInvalidId) {
+					string = [[NSString alloc] initWithData:data encoding:textEncodingName];
 				}
 			}
 			
@@ -318,7 +317,7 @@
 		[urlConnection cancel];
 		self.urlConnection = nil;
 		self.asyncData = nil;
-		self.asyncTextEncodingName = nil;
+		self.asyncTextEncodingName = NSUTF8StringEncoding;
 		
 		// Abort
 		aborted = YES;
@@ -386,32 +385,35 @@
 }
 
 #pragma mark -
-#pragma mark NSURLConnection Delegate (Async)
+#pragma mark ASIHTTPRequest Delegate (Async)
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[asyncData setLength:0];
-	self.asyncTextEncodingName = [response textEncodingName];
+- (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders{
+    self.asyncTextEncodingName = [request responseEncoding];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	[asyncData appendData:data];
+- (void)requestStarted:(ASIHTTPRequest *)request{
+    [asyncData setLength:0];
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	
+- (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data {
+    [asyncData appendData:data];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
 	// Failed
 	self.urlConnection = nil;
 	self.asyncData = nil;
-	self.asyncTextEncodingName = nil;
+	self.asyncTextEncodingName = NSUTF8StringEncoding;
 	
+    NSError *error = [request error];
     // Error
 	[self parsingFailedWithErrorCode:MWErrorCodeConnectionFailed andDescription:[error localizedDescription]];
 	
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	// Succeed
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    // Succeed
 	MWLog(@"MWFeedParser: Connection successful... received %d bytes of data", [asyncData length]);
 	
 	// Parse
@@ -420,12 +422,7 @@
     // Cleanup
     self.urlConnection = nil;
     self.asyncData = nil;
-	self.asyncTextEncodingName = nil;
-
-}
-
--(NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {
-	return nil; // Don't cache
+	self.asyncTextEncodingName = NSUTF8StringEncoding;
 }
 
 #pragma mark -

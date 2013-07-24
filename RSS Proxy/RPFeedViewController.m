@@ -65,12 +65,16 @@
         if(feedString == nil) {
             return;
         } else {
-            NSURL *feedURL = [NSURL URLWithString:feedString];
-            MWFeedParser* feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
-            feedParser.feedParseType = ParseTypeInfoOnly;
-            feedParser.delegate = self;
-            feedParser.connectionType = ConnectionTypeAsynchronously;
-            [feedParser parse];
+            dispatch_async(dispatch_get_global_queue(0, 0),
+                           ^ {
+                               NSURL *feedURL = [NSURL URLWithString:feedString];
+                               MWFeedParser* feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+                               feedParser.feedParseType = ParseTypeInfoOnly;
+                               feedParser.delegate = self;
+                               feedParser.connectionType = ConnectionTypeSynchronously;
+                               [feedParser parse];
+                               
+                           });
         }
     }
 }
@@ -100,6 +104,18 @@
     NSError *error;
     [context save:&error];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Found Feed"
+                                                        message:newFeed.title
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
+    });
     RPAppDelegate *appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
     [appDelegate updateFeeds];
 }
@@ -132,7 +148,6 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
@@ -194,7 +209,7 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView beginUpdates];
+    [self.tableView performSelectorOnMainThread:@selector(beginUpdates) withObject:nil waitUntilDone:YES];
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
@@ -239,7 +254,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView endUpdates];
+    [self.tableView performSelectorOnMainThread:@selector(endUpdates) withObject:nil waitUntilDone:YES];
 }
 
 /*
@@ -253,7 +268,7 @@
  */
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
+{   
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
