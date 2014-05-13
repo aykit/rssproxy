@@ -49,9 +49,8 @@
 }
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
-    CGSize titleSize = [self.detailItem.title sizeWithFont: self.detailTitleLabel.font
-                                         constrainedToSize:CGSizeMake(self.detailTitleLabel.frame.size.width, CGFLOAT_MAX)
-                                             lineBreakMode:UILineBreakModeWordWrap];
+    CGFloat titleFontSize = self.detailTitleLabel.font.pointSize;
+    CGSize titleSize = [self.detailItem.title sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:titleFontSize]}];
     
     CGRect newTitleFrame = CGRectMake(self.detailTitleLabel.frame.origin.x, self.detailTitleLabel.frame.origin.y, titleSize.width, titleSize.height);
     
