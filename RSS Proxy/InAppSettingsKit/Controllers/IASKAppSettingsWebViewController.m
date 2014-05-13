@@ -15,13 +15,11 @@
 //
 
 #import "IASKAppSettingsWebViewController.h"
+#import "IASKSettingsReader.h"
 
 @implementation IASKAppSettingsWebViewController
 
-@synthesize url;
-@synthesize webView;
-
-- (id)initWithFile:(NSString*)urlString key:(NSString*)key {
+- (id)initWithFile:(NSString*)urlString specifier:(IASKSpecifier*)specifier {
     self = [super init];
     if (self) {
         self.url = [NSURL URLWithString:urlString];
@@ -32,34 +30,27 @@
             else
                 self.url = nil;
         }
+		self.customTitle = [specifier localizedObjectForKey:kIASKChildTitle];
+		self.title = self.customTitle ? : specifier.title;
     }
     return self;
 }
 
 - (void)loadView
 {
-    webView = [[UIWebView alloc] init];
-    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-    UIViewAutoresizingFlexibleHeight;
-    webView.delegate = self;
+    self.webView = [[UIWebView alloc] init];
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.webView.delegate = self;
     
-    self.view = webView;
-}
-
-- (void)dealloc {
-	[webView release], webView = nil;
-	[url release], url = nil;
-	
-	[super dealloc];
+    self.view = self.webView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {  
-	[webView loadRequest:[NSURLRequest requestWithURL:self.url]];
-}
-
-- (void)viewDidUnload {
-	[super viewDidUnload];
-	self.webView = nil;
+	UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+	activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+	[activityIndicatorView startAnimating];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
+	[self.webView loadRequest:[NSURLRequest requestWithURL:self.url]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -67,7 +58,8 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-	self.navigationItem.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+	self.navigationItem.rightBarButtonItem = nil;
+	self.title = self.customTitle.length ? self.customTitle : [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
@@ -102,11 +94,10 @@
 				NSString *key = [[keyValue objectAtIndex:0] lowercaseString];
 				NSString *value = [keyValue objectAtIndex:1];
 				
-				value =  (NSString *)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
+				value =  CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
 																							 (CFStringRef)value,
 																							 CFSTR(""),
-																							 kCFStringEncodingUTF8);
-				[value autorelease];
+																							 kCFStringEncodingUTF8));
 				
 				if ([key isEqualToString:@"subject"]) {
 					[mailViewController setSubject:value];
@@ -133,21 +124,15 @@
 		}
 		
 		[mailViewController setToRecipients:toRecipients];
-    
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 50000)
-#pragma message "Now that we're iOS5 and up, remove this workaround"
-#endif
-    if([self respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-        [self presentViewController:mailViewController
-                           animated:YES
-                         completion:nil];
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [self presentModalViewController:mailViewController animated:YES];
-#pragma clang diagnostic pop
-    }
-		[mailViewController release];
+
+		mailViewController.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
+		mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
+		mailViewController.navigationBar.titleTextAttributes =  self.navigationController.navigationBar.titleTextAttributes;
+
+		UIStatusBarStyle savedStatusBarStyle = [UIApplication sharedApplication].statusBarStyle;
+		[self presentViewController:mailViewController animated:YES completion:^{
+			[UIApplication sharedApplication].statusBarStyle = savedStatusBarStyle;
+		}];
 		return NO;
 	}
 	
@@ -160,21 +145,7 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 50000)
-#pragma message "Now that we're iOS5 and up, remove this workaround"
-#endif
-    if([self respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-        [self dismissViewControllerAnimated:YES
-                                 completion:nil];
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        [self dismissModalViewControllerAnimated:YES];
-#pragma clang diagnostic pop
-
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
 
 @end
