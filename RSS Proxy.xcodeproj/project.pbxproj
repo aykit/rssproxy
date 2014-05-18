@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D14A3A01928D1B70008517D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D14A39F1928D1B70008517D /* Images.xcassets */; };
 		8DC43BB1174A221300129991 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC43BB0174A221300129991 /* UIKit.framework */; };
 		8DC43BB3174A221300129991 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC43BB2174A221300129991 /* Foundation.framework */; };
 		8DC43BB5174A221300129991 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC43BB4174A221300129991 /* CoreGraphics.framework */; };
@@ -55,8 +56,6 @@
 		8DC94420179C19AB00CE3D72 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC9441F179C19AB00CE3D72 /* MessageUI.framework */; };
 		8DC94423179C41FF00CE3D72 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC94421179C41FF00CE3D72 /* settings.png */; };
 		8DC94424179C41FF00CE3D72 /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC94422179C41FF00CE3D72 /* settings@2x.png */; };
-		8DC94427179C421600CE3D72 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC94425179C421600CE3D72 /* icon.png */; };
-		8DC94428179C421600CE3D72 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8DC94426179C421600CE3D72 /* icon@2x.png */; };
 		8DC94432179C46DE00CE3D72 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8DC94431179C46DE00CE3D72 /* Settings.bundle */; };
 		8DC94448179CA05600CE3D72 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC94435179CA05600CE3D72 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8DC94449179CA05600CE3D72 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC94438179CA05600CE3D72 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -74,6 +73,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8D14A39F1928D1B70008517D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8DC43BAD174A221300129991 /* RSS Proxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS Proxy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC43BB0174A221300129991 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8DC43BB2174A221300129991 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -153,8 +153,6 @@
 		8DC9441F179C19AB00CE3D72 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8DC94421179C41FF00CE3D72 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		8DC94422179C41FF00CE3D72 /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
-		8DC94425179C421600CE3D72 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		8DC94426179C421600CE3D72 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		8DC94431179C46DE00CE3D72 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8DC94434179CA05600CE3D72 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		8DC94435179CA05600CE3D72 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
@@ -255,6 +253,7 @@
 				8DC43BD6174A221300129991 /* RPDetailViewController.h */,
 				8DC43BD7174A221300129991 /* RPDetailViewController.m */,
 				8DC43BD0174A221300129991 /* RSS_Proxy.xcdatamodeld */,
+				8D14A39F1928D1B70008517D /* Images.xcassets */,
 				8DC43BB9174A221300129991 /* Supporting Files */,
 			);
 			path = "RSS Proxy";
@@ -263,8 +262,6 @@
 		8DC43BB9174A221300129991 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8DC94425179C421600CE3D72 /* icon.png */,
-				8DC94426179C421600CE3D72 /* icon@2x.png */,
 				8DC94421179C41FF00CE3D72 /* settings.png */,
 				8DC94422179C41FF00CE3D72 /* settings@2x.png */,
 				8DC943E6179BCC2900CE3D72 /* items@2x.png */,
@@ -435,6 +432,11 @@
 				CLASSPREFIX = RP;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = aykit;
+				TargetAttributes = {
+					8DC43BAC174A221300129991 = {
+						DevelopmentTeam = 8X979CD847;
+					};
+				};
 			};
 			buildConfigurationList = 8DC43BA8174A221300129991 /* Build configuration list for PBXProject "RSS Proxy" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -469,10 +471,9 @@
 				8DC943E3179BCB2000CE3D72 /* feeds.png in Resources */,
 				8DC943E5179BCC2500CE3D72 /* items.png in Resources */,
 				8DC943E7179BCC2900CE3D72 /* items@2x.png in Resources */,
+				8D14A3A01928D1B70008517D /* Images.xcassets in Resources */,
 				8DC94423179C41FF00CE3D72 /* settings.png in Resources */,
 				8DC94424179C41FF00CE3D72 /* settings@2x.png in Resources */,
-				8DC94427179C421600CE3D72 /* icon.png in Resources */,
-				8DC94428179C421600CE3D72 /* icon@2x.png in Resources */,
 				8DC94432179C46DE00CE3D72 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -617,11 +618,15 @@
 		8DC43BDC174A221300129991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSS Proxy/RSS Proxy-Prefix.pch";
 				INFOPLIST_FILE = "RSS Proxy/RSS Proxy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -629,11 +634,15 @@
 		8DC43BDD174A221300129991 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RSS Proxy/RSS Proxy-Prefix.pch";
 				INFOPLIST_FILE = "RSS Proxy/RSS Proxy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
