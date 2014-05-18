@@ -14,6 +14,7 @@
 #import "MWFeedParser.h"
 #import "Feed.h"
 #import "FeedItem.h"
+#import "NSString+HTML.h"
 
 @implementation RPAppDelegate
 
@@ -227,6 +228,8 @@
     
 }
 
+# pragma mark - FeedParser Delegegate
+
 - (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
     NSManagedObjectContext *context = [self managedObjectContext];
     
@@ -245,8 +248,14 @@
                                  insertNewObjectForEntityForName:@"FeedItem"
                                  inManagedObjectContext:context];
         
+        
+        NSString* desc = [item.summary stringByConvertingHTMLToPlainText];
+        if (item.content) {
+            desc = [item.content stringByConvertingHTMLToPlainText];
+        }
+        
         newFeedItem.title = item.title;
-        newFeedItem.desc = item.summary;
+        newFeedItem.desc = desc;
         newFeedItem.timestamp = item.date;
         newFeedItem.unread = @YES;
         
@@ -264,6 +273,23 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         
     }
+}
+
+- (void) feedParser:(MWFeedParser *)parser didFailWithError:(NSError *)error {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"An error occured"
+                                                        message:[error localizedDescription]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
+        
+    }];
 }
 
 @end

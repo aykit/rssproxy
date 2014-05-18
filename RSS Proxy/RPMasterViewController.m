@@ -31,10 +31,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-//
- //   UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
- //   self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (RPDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc]
@@ -232,15 +228,6 @@
 
     UIImageView *imgNewView = (UIImageView *)[cell viewWithTag:100];
     
- /*   CGRect rect = imgNewView.frame;
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [[UIColor blueColor] CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();*/
     imgNewView.image = feedItem.unread?[UIImage imageNamed:@"unread"]:nil;
 }
 

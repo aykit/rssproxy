@@ -161,7 +161,9 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSString* proxyHost = [prefs stringForKey:@"proxy_host"];
     NSString* proxyPort = [prefs stringForKey:@"proxy_port"];
-    if (proxyHost && proxyPort) {
+    bool isProxyEnabled = [prefs boolForKey:@"is_proxy_enabled"];
+    
+    if (proxyHost && proxyPort && isProxyEnabled) {
         [request setProxyHost:proxyHost];
         [request setProxyPort:[proxyPort intValue]];
         [request setProxyType:(NSString *)kCFProxyTypeSOCKS];
@@ -409,6 +411,7 @@
     NSError *error = [request error];
     // Error
 	[self parsingFailedWithErrorCode:MWErrorCodeConnectionFailed andDescription:[error localizedDescription]];
+    
 	
 }
 
