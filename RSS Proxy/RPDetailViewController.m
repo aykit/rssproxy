@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 aykit. All rights reserved.
 //
 
+#import "NSString+HTML.h"
 #import "RPDetailViewController.h"
 
 @interface RPDetailViewController ()
@@ -22,8 +23,10 @@
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
         
-        // Update the view.
-        [self configureView];
+        // Update the view when on iPad
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self configureView];
+        }
     }
 
     if (self.masterPopoverController != nil) {
@@ -31,46 +34,68 @@
     }        
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    [self configureView];
+}
+
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     
     if (self.detailItem) {
-        self.detailTitleLabel.text = self.detailItem.title;
-        self.detailDateLabel.text = [dateFormatter stringFromDate: self.detailItem.timestamp];
-      //  self.detailDescriptionLabel.text = [self.detailItem.desc stringByConvertingHTMLToPlainText];
-        UIFont* systemFont = [UIFont systemFontOfSize:17];
-        [self.detailDescriptionWebView loadHTMLString:[NSString stringWithFormat:@"<style>* {margin: 0; padding: 0; border: 0; font-family: \"%@\"}</style>%@", systemFont.familyName, self.detailItem.desc] baseURL:nil];
+//        self.detailTitleLabel.text = self.detailItem.title;
+//        self.detailDateLabel.text = [dateFormatter stringFromDate: self.detailItem.timestamp];
+//        self.detailDescriptionLabel.text = self.detailItem.desc;
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+        
+        NSString *dateString = [dateFormatter stringFromDate: self.detailItem.timestamp];
+        
+        const CGFloat fontSize = 17;
+        UIFont *boldFont = [UIFont boldSystemFontOfSize:fontSize + 5];
+        UIFont *regularFont = [UIFont systemFontOfSize:fontSize];
+        
+        NSDictionary *boldAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                               boldFont, NSFontAttributeName, nil];
+        NSDictionary *defaultAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  regularFont, NSFontAttributeName, nil];
+        
+        NSRange titleRange = NSMakeRange(0,self.detailItem.title.length);
+//        NSRange dateRange = NSMakeRange(titleRange.location+1,dateString.length);
+//        NSRange textRange = NSMakeRange(dateRange.location+1,self.detailItem.desc.length);
+
+        NSString *wholeText = [NSString stringWithFormat:@"%@\n\n%@\n\n%@", self.detailItem.title, dateString, self.detailItem.desc];
+        
+        NSMutableAttributedString *attributedText =
+        [[NSMutableAttributedString alloc] initWithString:wholeText
+                                               attributes:defaultAttrs];
+        
+        [attributedText setAttributes:boldAttrs range:titleRange];
+        
+        self.detailContentText.attributedText = attributedText;
+        
+        
+//        CGFloat titleFontSize = self.detailTitleLabel.font.pointSize;
+//        [self.detailTitleLabel setNumberOfLines:2];
+//        CGSize titleSize = [self.detailItem.title sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:titleFontSize]}];
+//        
+//        CGRect newTitleFrame = CGRectMake(self.detailTitleLabel.frame.origin.x, self.detailTitleLabel.frame.origin.y, titleSize.width, titleSize.height);
+//        
+//        CGFloat heightDiff = newTitleFrame.size.height - self.detailTitleLabel.frame.size.height;
+//        
+//        self.detailDateLabel.frame = CGRectMake(self.detailDateLabel.frame.origin.x, self.detailDateLabel.frame.origin.y + heightDiff, self.detailDateLabel.frame.size.width, self.detailDateLabel.frame.size.height);
+//        
+//        [self.detailTitleLabel setFrame:newTitleFrame];
+//        
+//        CGSize descriptionViewContentSize = self.detailDescriptionLabel.frame.size;
+//        
+//        self.detailDescriptionLabel.frame = CGRectMake(self.detailDescriptionLabel.frame.origin.x, self.detailDescriptionLabel.frame.origin.y + heightDiff, descriptionViewContentSize.width, descriptionViewContentSize.height);
+//        self.scrollView.contentSize = CGSizeMake(descriptionViewContentSize.width, descriptionViewContentSize.height + self.detailDescriptionLabel.frame.origin.y);
     }
-}
-
-- (void) webViewDidFinishLoad:(UIWebView *)webView{
-    CGFloat titleFontSize = self.detailTitleLabel.font.pointSize;
-    CGSize titleSize = [self.detailItem.title sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:titleFontSize]}];
-    
-    CGRect newTitleFrame = CGRectMake(self.detailTitleLabel.frame.origin.x, self.detailTitleLabel.frame.origin.y, titleSize.width, titleSize.height);
-    
-    CGFloat heightDiff = newTitleFrame.size.height - self.detailTitleLabel.frame.size.height;
-    
-    self.detailDateLabel.frame = CGRectMake(self.detailDateLabel.frame.origin.x, self.detailDateLabel.frame.origin.y + heightDiff, self.detailDateLabel.frame.size.width, self.detailDateLabel.frame.size.height);
-    
-    [self.detailTitleLabel setFrame:newTitleFrame];
-    
-    CGSize descriptionWebViewContentSize = self.detailDescriptionWebView.scrollView.contentSize;
-    
-    self.detailDescriptionWebView.frame = CGRectMake(self.detailDescriptionWebView.frame.origin.x, self.detailDescriptionWebView.frame.origin.y + heightDiff, descriptionWebViewContentSize.width, descriptionWebViewContentSize.height);
-    self.scrollView.contentSize = CGSizeMake(descriptionWebViewContentSize.width, descriptionWebViewContentSize.height + self.detailDescriptionWebView.frame.origin.y);
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [self configureView];
 }
 
 - (void)didReceiveMemoryWarning

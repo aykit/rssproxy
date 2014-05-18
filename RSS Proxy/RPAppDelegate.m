@@ -14,6 +14,7 @@
 #import "MWFeedParser.h"
 #import "Feed.h"
 #import "FeedItem.h"
+#import "NSString+HTML.h"
 
 @implementation RPAppDelegate
 
@@ -245,8 +246,14 @@
                                  insertNewObjectForEntityForName:@"FeedItem"
                                  inManagedObjectContext:context];
         
+        
+        NSString* desc = [item.summary stringByConvertingHTMLToPlainText];
+        if (item.content) {
+            desc = [item.content stringByConvertingHTMLToPlainText];
+        }
+        
         newFeedItem.title = item.title;
-        newFeedItem.desc = item.summary;
+        newFeedItem.desc = desc;
         newFeedItem.timestamp = item.date;
         newFeedItem.unread = @YES;
         
