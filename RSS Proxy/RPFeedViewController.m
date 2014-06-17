@@ -43,7 +43,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction) addNewFeed {
+- (void) addFeedNamedFromSource: (NSString*) source {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add Feed URL"
                                                     message:nil
                                                    delegate:self
@@ -53,8 +53,13 @@
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     UITextField *textField = [alert textFieldAtIndex:0];
     textField.keyboardType = UIKeyboardTypeURL;
+    textField.text = source;
     
     [alert show];
+}
+
+- (IBAction) addNewFeed {
+    [self addFeedNamedFromSource: nil];
 }
 
 - (void)alertView:(UIAlertView *)alert clickedButtonAtIndex:(NSInteger)buttonIndex {

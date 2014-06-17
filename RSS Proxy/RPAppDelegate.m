@@ -172,6 +172,31 @@
     return _persistentStoreCoordinator;
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    UITabBarController *tabBarController = nil;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        //        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+        //        UITabBarController *tabBarController = [splitViewController.viewControllers lastObject];
+        //        controller.managedObjectContext = self.managedObjectContext;
+    } else {
+        tabBarController = (UITabBarController *)self.window.rootViewController;
+    }
+    
+    [tabBarController setSelectedIndex:1];
+    
+    UINavigationController * feedNavigationController = [tabBarController.viewControllers objectAtIndex:1];
+    
+    
+    RPFeedViewController* feedViewController = [feedNavigationController topViewController];
+    
+    [feedViewController addFeedNamedFromSource:[url absoluteString]];
+    
+    
+    NSLog(@"URL:%@", [url absoluteString]);
+    return YES;
+}
+
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.

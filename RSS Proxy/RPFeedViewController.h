@@ -17,5 +17,6 @@
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction) addNewFeed;
+- (void) addFeedNamedFromSource: (NSString*) source;
 
 @end
