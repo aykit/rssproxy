@@ -252,7 +252,7 @@
     
 }
 
-# pragma mark - FeedParser Delegegate
+# pragma mark - FeedParser Delegate
 
 - (void)feedParser:(MWFeedParser *)parser didParseFeedItem:(MWFeedItem *)item {
     NSManagedObjectContext *context = [self managedObjectContext];
