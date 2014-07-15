@@ -70,18 +70,25 @@
         if(feedString == nil) {
             return;
         } else {
-            dispatch_async(dispatch_get_global_queue(0, 0),
-                           ^ {
-                               NSURL *feedURL = [NSURL URLWithString:feedString];
-                               MWFeedParser* feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
-                               feedParser.feedParseType = ParseTypeInfoOnly;
-                               feedParser.delegate = self;
-                               feedParser.connectionType = ConnectionTypeSynchronously;
-                               [feedParser parse];
-                               
-                           });
+            NSOperationQueue *queue = [NSOperationQueue new];
+            
+            NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                                    selector:@selector(checkFeed:)
+                                                                                      object:feedString];
+            
+            [queue addOperation:operation];
         }
     }
+}
+
+- (void)checkFeed: (NSString*) feedString {
+    
+    NSURL *feedURL = [NSURL URLWithString:feedString];
+    MWFeedParser* feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+    feedParser.feedParseType = ParseTypeInfoOnly;
+    feedParser.delegate = self;
+    feedParser.connectionType = ConnectionTypeSynchronously;
+    [feedParser parse];
 }
 
 - (void) feedParser:(MWFeedParser *)parser didFailWithError:(NSError *)error {
@@ -109,18 +116,16 @@
     NSError *error;
     [context save:&error];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Found Feed"
-                                                        message:newFeed.title
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        
-        alert.alertViewStyle = UIAlertViewStyleDefault;
-        
-        [alert show];
-    });
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Found Feed"
+                                                    message:newFeed.title
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    
+    alert.alertViewStyle = UIAlertViewStyleDefault;
+    
+    [alert show];
+    
     RPAppDelegate *appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
     [appDelegate updateFeeds];
 }
@@ -273,7 +278,7 @@
  */
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{   
+{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];

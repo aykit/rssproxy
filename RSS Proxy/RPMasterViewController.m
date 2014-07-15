@@ -203,7 +203,7 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView performSelectorOnMainThread:@selector(endUpdates) withObject:nil waitUntilDone:YES];
+    [self.tableView performSelectorOnMainThread:@selector(endUpdates) withObject:nil waitUntilDone:NO];
 }
 
 /*

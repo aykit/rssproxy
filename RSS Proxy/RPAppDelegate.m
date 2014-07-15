@@ -27,15 +27,15 @@
 {
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-//        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-//        UITabBarController *tabBarController = [splitViewController.viewControllers lastObject];
-//        UINavigationController * navigationController = [tabBarController.viewControllers objectAtIndex:0];
-//        splitViewController.delegate = (id)navigationController.topViewController;
-//        
-//        UITabBarController *masterTabbarController = splitViewController.viewControllers[0];
-//        UINavigationController * masterNavigationController = [tabBarController.viewControllers objectAtIndex:0];
-//        RPMasterViewController *controller = (RPMasterViewController *)masterNavigationController.topViewController;
-//        controller.managedObjectContext = self.managedObjectContext;
+        //        UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+        //        UITabBarController *tabBarController = [splitViewController.viewControllers lastObject];
+        //        UINavigationController * navigationController = [tabBarController.viewControllers objectAtIndex:0];
+        //        splitViewController.delegate = (id)navigationController.topViewController;
+        //
+        //        UITabBarController *masterTabbarController = splitViewController.viewControllers[0];
+        //        UINavigationController * masterNavigationController = [tabBarController.viewControllers objectAtIndex:0];
+        //        RPMasterViewController *controller = (RPMasterViewController *)masterNavigationController.topViewController;
+        //        controller.managedObjectContext = self.managedObjectContext;
     } else {
         UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
         UINavigationController * navigationController = [tabBarController.viewControllers objectAtIndex:0];
@@ -50,7 +50,7 @@
     }
     return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -59,7 +59,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
@@ -85,11 +85,11 @@
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
 }
 
@@ -145,7 +145,7 @@
         /*
          Replace this implementation with code to handle the error appropriately.
          
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
          
          Typical reasons for an error here include:
          * The persistent store is not accessible;
@@ -167,7 +167,7 @@
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
+    }
     
     return _persistentStoreCoordinator;
 }
@@ -210,8 +210,7 @@
 }
 
 - (void) updateFeeds {
-    dispatch_async(dispatch_get_global_queue(0, 0),
-    ^ {
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         NSManagedObjectContext *moc = [self managedObjectContext];
         NSEntityDescription *entityDescription = [NSEntityDescription
                                                   entityForName:@"Feed" inManagedObjectContext:moc];
@@ -221,18 +220,29 @@
         NSError *error;
         NSArray *feeds = [moc executeFetchRequest:request error:&error];
         
-        MWFeedParser* feedParser;
+        NSOperationQueue *queue = [NSOperationQueue new];
         
-        for (Feed* feed in feeds) {
-            current_feed = feed;
-            NSURL *feedURL = [NSURL URLWithString:feed.link];
-            feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
-            feedParser.delegate = self;
-            feedParser.feedParseType = ParseTypeFull;
-            feedParser.connectionType = ConnectionTypeSynchronously;
-            [feedParser parse];
-        }
-    });
+        NSInvocationOperation *operation = [[NSInvocationOperation alloc] initWithTarget:self
+                                                                                selector:@selector(downloadFeeds:)
+                                                                                  object:feeds];
+        [queue addOperation:operation];
+    }];
+}
+
+- (void) downloadFeeds:(NSArray*) feeds {
+    MWFeedParser* feedParser;
+    
+    for (Feed* feed in feeds) {
+        current_feed = feed;
+        
+        
+        NSURL *feedURL = [NSURL URLWithString:feed.link];
+        feedParser = [[MWFeedParser alloc] initWithFeedURL:feedURL];
+        feedParser.delegate = self;
+        feedParser.feedParseType = ParseTypeFull;
+        feedParser.connectionType = ConnectionTypeSynchronously;
+        [feedParser parse];
+    }
 }
 
 - (void) updateApplicationBadge
