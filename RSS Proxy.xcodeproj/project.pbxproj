@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D061F1D1975675B00BDE52F /* feeds@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D061F1C1975675B00BDE52F /* feeds@2x.png */; };
 		8D14A3A01928D1B70008517D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D14A39F1928D1B70008517D /* Images.xcassets */; };
 		8DC43BB1174A221300129991 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC43BB0174A221300129991 /* UIKit.framework */; };
 		8DC43BB3174A221300129991 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC43BB2174A221300129991 /* Foundation.framework */; };
@@ -73,6 +74,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8D061F1C1975675B00BDE52F /* feeds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feeds@2x.png"; sourceTree = "<group>"; };
 		8D14A39F1928D1B70008517D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8DC43BAD174A221300129991 /* RSS Proxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RSS Proxy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC43BB0174A221300129991 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -267,6 +269,7 @@
 				8DC943E6179BCC2900CE3D72 /* items@2x.png */,
 				8DC943E4179BCC2500CE3D72 /* items.png */,
 				8DC943E2179BCB2000CE3D72 /* feeds.png */,
+				8D061F1C1975675B00BDE52F /* feeds@2x.png */,
 				8DC943DE179BC95A00CE3D72 /* unread.png */,
 				8DC943DF179BC95A00CE3D72 /* unread@2x.png */,
 				8DC43BBA174A221300129991 /* RSS Proxy-Info.plist */,
@@ -460,6 +463,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D061F1D1975675B00BDE52F /* feeds@2x.png in Resources */,
 				8DC43BBD174A221300129991 /* InfoPlist.strings in Resources */,
 				8DC43BC5174A221300129991 /* Default.png in Resources */,
 				8DC43BC7174A221300129991 /* Default@2x.png in Resources */,
