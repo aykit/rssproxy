@@ -188,10 +188,9 @@
     UINavigationController * feedNavigationController = [tabBarController.viewControllers objectAtIndex:1];
     
     
-    RPFeedViewController* feedViewController = [feedNavigationController topViewController];
+    RPFeedViewController* feedViewController = (RPFeedViewController *) [feedNavigationController topViewController];
     
     [feedViewController addFeedNamedFromSource:[url absoluteString]];
-    
     
     NSLog(@"URL:%@", [url absoluteString]);
     return YES;
