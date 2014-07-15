@@ -92,42 +92,51 @@
 }
 
 - (void) feedParser:(MWFeedParser *)parser didFailWithError:(NSError *)error {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error parsing your Feed"
-                                                    message:[error localizedDescription]
-                                                   delegate:nil
-                                          cancelButtonTitle:nil
-                                          otherButtonTitles:@"OK", nil];
     
-    alert.alertViewStyle = UIAlertViewStyleDefault;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error parsing your Feed"
+                                                        message:[error localizedDescription]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
+    }];
     
-    [alert show];
 }
 
 - (void)feedParser:(MWFeedParser *)parser didParseFeedInfo:(MWFeedInfo *)info {
-    NSManagedObjectContext *context = [self managedObjectContext];
-    
-    Feed* newFeed = [NSEntityDescription
-                     insertNewObjectForEntityForName:@"Feed"
-                     inManagedObjectContext:context];
-    
-    newFeed.link = [parser.url absoluteString];
-    newFeed.title = info.title;
-    
-    NSError *error;
-    [context save:&error];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Found Feed"
-                                                    message:newFeed.title
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    
-    alert.alertViewStyle = UIAlertViewStyleDefault;
-    
-    [alert show];
-    
-    RPAppDelegate *appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
-    [appDelegate updateFeeds];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        NSManagedObjectContext *context = [self managedObjectContext];
+        
+        Feed* newFeed = [NSEntityDescription
+                         insertNewObjectForEntityForName:@"Feed"
+                         inManagedObjectContext:context];
+        
+        newFeed.link = [parser.url absoluteString];
+        newFeed.title = info.title;
+        
+        NSError *error;
+        [context save:&error];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Found Feed"
+                                                        message:newFeed.title
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
+        
+        RPAppDelegate *appDelegate = (RPAppDelegate*)[[UIApplication sharedApplication] delegate];
+        [appDelegate updateFeeds];
+        
+    }];
 }
 
 #pragma mark - Table View
@@ -206,13 +215,13 @@
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
-	NSError *error = nil;
-	if (![self.fetchedResultsController performFetch:&error]) {
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle the error appropriately.
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
     
     return _fetchedResultsController;
 }
